@@ -1,8 +1,6 @@
 import * as cl from "./colors.js";
-import { getNeutralParagraph } from "./paragraph .js";
+import { getParagraph } from "./paragraph .js";
 import { calculateWPM, inputArr, wordValidator } from "./functions.js";
-
-let noOfWrongWords = 0;
 
 const render = (paragraph, inputArr) => {
   console.clear();
@@ -10,34 +8,40 @@ const render = (paragraph, inputArr) => {
   console.log(inputArr.join(" "));
 };
 
-const userInput = (paragraph) => {
-  let i = 0;
+const validateWord = (paragraph, i, input, noOfWrongWords) => {
+  inputArr.push(input);
+  if (!wordValidator(paragraph, inputArr, i, noOfWrongWords)) {
+    return true;
+  }
+  return false;
+};
 
-  while (i !== paragraph.length) {
-    render(paragraph, inputArr);
+const startProgram = (paragraph) => {
+  let noOfWrongWords = 0;
+  render(paragraph, inputArr);
 
-    inputArr.push(prompt(""));
-
-    if (!wordValidator(paragraph, inputArr, i, noOfWrongWords)) {
+  for (let i = 0; i < paragraph.length; i++) {
+    const inputWord = prompt("");
+    if (validateWord(paragraph, i, inputWord, noOfWrongWords)) {
       noOfWrongWords++;
     }
 
-    i++;
+    render(paragraph, inputArr);
   }
-
-  render(paragraph, inputArr);
+  return noOfWrongWords;
 };
 
-const main = async () => {
-  const paragraph = await getNeutralParagraph();
+const main = async (length) => {
+  const paragraph = await getParagraph(length);
   const words = paragraph.split(" ");
 
   const start = Date.now();
-  userInput(words);
+
+  const noOfWrongWords = startProgram(words);
 
   const { drived, rawWPM } = calculateWPM(start, noOfWrongWords);
   console.log("WPM -->", Number(drived).toFixed(2));
   console.log("RawWPM -->", Number(rawWPM).toFixed(2));
 };
 
-main();
+main(Number(Deno.args[0]) || 10);

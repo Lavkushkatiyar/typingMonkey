@@ -5,7 +5,7 @@ const para1 =
 const para3 = `my name is Lovekush`;
 
 export const paragraphs = [para1, para2, para3];
-export const getNeutralParagraph = async () => {
+export const getParagraph = async (length) => {
   const topics = [
     "Algorithm",
     "Computer",
@@ -28,5 +28,5 @@ export const getNeutralParagraph = async () => {
     .replace(/\s+/g, " ")
     .split(" ");
 
-  return words.slice(0, 5).join(" ");
+  return words.slice(0, length).join(" ");
 };

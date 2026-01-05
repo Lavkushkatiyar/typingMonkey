@@ -10,58 +10,69 @@ export const calculateWPM = (start, noOfWrongWords) => {
 
   const drived = correctWords / durationMinutes;
   const rawWPM = totalWords / durationMinutes;
-
   return { drived, rawWPM };
 };
 
-export const extraCharacter = (userWord, index, outputArr) => {
-  if (index < userWord.length) {
-    outputArr.push(highlightMismatch(userWord.slice(index)));
-    return true;
+// diff
+// {value: "something", hasDiff: true}
+// outputArr.push(formatDiff(diff))
+export const differentWord = (word, index) => {
+  if (index < word.length) {
+    return {
+      isValidWord: false,
+      missedCharacter: highlightMismatch(word.slice(index)),
+    };
   }
-  return false;
+  return { isValidWord: true, missedCharacter: "" };
 };
 
-export const lessCharacter = (ogWord, index, outputArr) => {
-  if (index < ogWord.length) {
-    outputArr.push(highlightMismatch(ogWord.slice(index)));
-    return true;
+// {valid: true/false, diff: "something"}
+// const validateWord = (originalWord, userWord) => {
+// };
+
+const wordValidate = (originalWord, userWord, outputArr) => {
+  let isValidWord = true;
+  let coveredLen = 0;
+  const wordLenght = Math.min(originalWord.length, userWord.length);
+
+  for (let index = 0; index < wordLenght; index++) {
+    if (originalWord[index] !== userWord[index]) {
+      isValidWord = false;
+      outputArr.push(highlightMismatch(userWord[index]));
+    } else outputArr.push(userWord[index]);
+
+    coveredLen++;
   }
-  return false;
+  return { index: coveredLen, isValidWord };
 };
 
-const wordValidate = (ogWord, userWord, outputArr) => {
-  let flag = true;
-  let i = 0;
-
-  while (i < Math.min(ogWord.length, userWord.length)) {
-    if (ogWord[i] !== userWord[i]) {
-      flag = false;
-      outputArr.push(highlightMismatch(userWord[i]));
-    } else outputArr.push(userWord[i]);
-    i++;
-  }
-  return { i, flag };
-};
-
-const buildValidatedWord = (ogWord, userWord) => {
+const buildValidatedWord = (originalWord, userWord) => {
   const outputArr = [];
 
-  let { index, flag } = wordValidate(ogWord, userWord, outputArr);
+  let { index, isValidWord } = wordValidate(originalWord, userWord, outputArr);
 
-  if (extraCharacter(userWord, index, outputArr)) flag = false;
+  const extraCharcterInWord = differentWord(userWord, index, outputArr);
 
-  if (lessCharacter(ogWord, index, outputArr)) flag = false;
+  const lessCharacterInWord = differentWord(originalWord, index, outputArr);
 
-  return { flag, output: outputArr.join("") };
+  if (!extraCharcterInWord.isValidWord || !lessCharacterInWord.isValidWord) {
+    isValidWord = false;
+
+    outputArr.push(
+      extraCharcterInWord.missedCharacter ||
+        lessCharacterInWord.missedCharacter,
+    );
+  }
+
+  return { isValidWord, outputArr };
 };
 
 export const wordValidator = (paragraph, inputArr, index) => {
-  const ogWord = paragraph[index].trim();
+  const originalWord = paragraph[index].trim();
   const userWord = inputArr[index].trim();
 
-  const { flag, output } = buildValidatedWord(ogWord, userWord);
-  inputArr[index] = output;
-
-  return flag;
+  const { isValidWord, outputArr } = buildValidatedWord(originalWord, userWord);
+  console.log(isValidWord);
+  inputArr[index] = outputArr.join("");
+  return isValidWord;
 };
