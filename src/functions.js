@@ -1,6 +1,7 @@
 import * as cl from "./colors.js";
 
 export const inputArr = [];
+const highlightMismatch = (char) => cl.bold(cl.red(char));
 
 export const calculateWPM = (start, noOfWrongWords) => {
   const totalWords = inputArr.length;
@@ -13,32 +14,44 @@ export const calculateWPM = (start, noOfWrongWords) => {
   return { drived, rawWPM };
 };
 
-const highlightMismatch = (char) => cl.bold(cl.red(char));
+export const extraCharacter = (userWord, index, outputArr) => {
+  if (index < userWord.length) {
+    outputArr.push(highlightMismatch(userWord.slice(index)));
+    return true;
+  }
+  return false;
+};
 
-const buildValidatedWord = (ogWord, userWord) => {
+export const lessCharacter = (ogWord, index, outputArr) => {
+  if (index < ogWord.length) {
+    outputArr.push(highlightMismatch(ogWord.slice(index)));
+    return true;
+  }
+  return false;
+};
+
+const wordValidate = (ogWord, userWord, outputArr) => {
   let flag = true;
-  const outputArr = [];
   let i = 0;
 
   while (i < Math.min(ogWord.length, userWord.length)) {
     if (ogWord[i] !== userWord[i]) {
       flag = false;
       outputArr.push(highlightMismatch(userWord[i]));
-    } else {
-      outputArr.push(userWord[i]);
-    }
+    } else outputArr.push(userWord[i]);
     i++;
   }
+  return { i, flag };
+};
 
-  if (i < userWord.length) {
-    flag = false;
-    outputArr.push(highlightMismatch(userWord.slice(i)));
-  }
+const buildValidatedWord = (ogWord, userWord) => {
+  const outputArr = [];
 
-  if (i < ogWord.length) {
-    flag = false;
-    outputArr.push(highlightMismatch(ogWord.slice(i)));
-  }
+  let { index, flag } = wordValidate(ogWord, userWord, outputArr);
+
+  if (extraCharacter(userWord, index, outputArr)) flag = false;
+
+  if (lessCharacter(ogWord, index, outputArr)) flag = false;
 
   return { flag, output: outputArr.join("") };
 };

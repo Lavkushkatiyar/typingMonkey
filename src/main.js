@@ -35,10 +35,9 @@ const main = async () => {
   const start = Date.now();
   userInput(words);
 
-  const typingSpeed = calculateWPM(start, noOfWrongWords);
-
-  console.log("WPM -->", Number(typingSpeed.drived).toFixed(2));
-  console.log("RawWPM -->", Number(typingSpeed.rawWPM).toFixed(2));
+  const { drived, rawWPM } = calculateWPM(start, noOfWrongWords);
+  console.log("WPM -->", Number(drived).toFixed(2));
+  console.log("RawWPM -->", Number(rawWPM).toFixed(2));
 };
 
 main();
