@@ -1,8 +1,5 @@
 import * as cl from "./colors.js";
 
-export const inputArr = [];
-const highlightMismatch = (char) => cl.bold(cl.red(char));
-
 export const calculateWPM = (start, noOfWrongWords) => {
   const totalWords = inputArr.length;
   const correctWords = totalWords - noOfWrongWords;
@@ -67,12 +64,36 @@ const buildValidatedWord = (originalWord, userWord) => {
   return { isValidWord, outputArr };
 };
 
-export const wordValidator = (paragraph, inputArr, index) => {
-  const originalWord = paragraph[index].trim();
-  const userWord = inputArr[index].trim();
+export const buildTypedWordObject = (expected, typed, charResults) => {
+  const len = Math.max(expectedChars.length, typedChars.length);
+  const charResults = [];
 
-  const { isValidWord, outputArr } = buildValidatedWord(originalWord, userWord);
-  console.log(isValidWord);
-  inputArr[index] = outputArr.join("");
-  return isValidWord;
+  let wrongCount = 0;
+
+  for (let i = 0; i < len; i++) {
+    const expectedChar = expectedChars[i] ?? "";
+    const typedChar = typedChars[i] ?? "";
+    const correct = expectedChar === typedChar;
+
+    if (!correct) wrongCount++;
+
+    charResults.push({
+      expectedChar,
+      typedChar,
+      correct,
+    });
+  }
+
+  return {
+    isCorrect: expected === typed,
+    wrongCount,
+    charResults,
+  };
+};
+
+export const compareWords = (paragraph, inputArr) => {
+  const expected = paragraph.trim();
+  const typed = inputArr.trim();
+
+  return buildTypedWordObject(expected, typed);
 };
