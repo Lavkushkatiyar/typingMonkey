@@ -1,13 +1,10 @@
 import * as cl from "./colors.js";
 
-export const calculateWPM = (start, noOfWrongWords) => {
-  const totalWords = inputArr.length;
-  const correctWords = totalWords - noOfWrongWords;
-  const durationMinutes = ((Date.now() - start) / 1000) / 60;
-
-  const drived = correctWords / durationMinutes;
-  const rawWPM = totalWords / durationMinutes;
-  return { drived, rawWPM };
+export const calculateWPM = (startTime, wrongWordCount) => {
+  const timeInMinutes = (Date.now() - startTime) / 60000;
+  const rawWPM = wrongWordCount / Math.max(timeInMinutes, 1 / 60);
+  const drived = Math.max(rawWPM - wrongWordCount, 0);
+  return { rawWPM, drived };
 };
 
 // diff
@@ -64,18 +61,14 @@ const buildValidatedWord = (originalWord, userWord) => {
   return { isValidWord, outputArr };
 };
 
-export const buildTypedWordObject = (expected, typed, charResults) => {
-  const len = Math.max(expectedChars.length, typedChars.length);
+export const buildTypedWordObject = (expected, typed) => {
+  const len = Math.max(expected.length, typed.length);
   const charResults = [];
 
-  let wrongCount = 0;
-
   for (let i = 0; i < len; i++) {
-    const expectedChar = expectedChars[i] ?? "";
-    const typedChar = typedChars[i] ?? "";
+    const expectedChar = expected[i] ?? "";
+    const typedChar = typed[i] ?? "";
     const correct = expectedChar === typedChar;
-
-    if (!correct) wrongCount++;
 
     charResults.push({
       expectedChar,
@@ -86,7 +79,6 @@ export const buildTypedWordObject = (expected, typed, charResults) => {
 
   return {
     isCorrect: expected === typed,
-    wrongCount,
     charResults,
   };
 };

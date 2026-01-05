@@ -1,3 +1,6 @@
+import * as cl from "./colors.js";
+import { compareWords } from "./functions.js";
+
 const render = (paragraph, inputArr) => {
   console.clear();
   console.log(cl.bold(paragraph.join(" ")));
