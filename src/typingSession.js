@@ -1,16 +1,29 @@
 import * as cl from "./colors.js";
 import { compareWords } from "./functions.js";
+const formatCharacter = (typedObject) => {
+  if (typedObject.correct) return typedObject.typedChar;
+  if (typedObject.typedChar === "") return cl.red(typedObject.expectedChar);
+  return cl.red(typedObject.typedChar);
+};
+const printUserInput = (charResults, outputArr) => {
+  for (const result of charResults) {
+    outputArr.push(result.map(formatCharacter).join(""));
+  }
+  console.log(outputArr.join(" "));
+};
 
-const render = (paragraph, inputArr) => {
+const renderUI = (paragraph, typedObject) => {
+  const outputArr = [];
   console.clear();
   console.log(cl.bold(paragraph.join(" ")));
-  console.log(inputArr.join(" "));
+  const charResults = typedObject.map((x) => x.charResults);
+  printUserInput(charResults, outputArr);
 };
 export const startTypingSession = (paragraphWords) => {
   const typedWords = [];
   let wrongWordCount = 0;
 
-  render(paragraphWords, typedWords);
+  renderUI(paragraphWords, typedWords);
 
   for (let i = 0; i < paragraphWords.length; i++) {
     const inputWord = prompt("");
@@ -24,7 +37,7 @@ export const startTypingSession = (paragraphWords) => {
 
     if (!comparison.isCorrect) wrongWordCount++;
 
-    render(paragraphWords, typedWords);
+    renderUI(paragraphWords, typedWords);
   }
 
   return wrongWordCount;

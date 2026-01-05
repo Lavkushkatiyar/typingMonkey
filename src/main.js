@@ -10,7 +10,11 @@ const main = async (length) => {
 
   const noOfWrongWords = startTypingSession(words);
 
-  const { drived, rawWPM } = calculateWPM(start, noOfWrongWords);
+  const { drived, rawWPM } = calculateWPM(
+    start,
+    paragraph.split(" "),
+    noOfWrongWords,
+  );
   console.log("WPM -->", Number(drived).toFixed(2));
   console.log("RawWPM -->", Number(rawWPM).toFixed(2));
 };
