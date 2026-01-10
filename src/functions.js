@@ -7,6 +7,16 @@ export const calculateWPM = (start, paragraph, noOfWrongWords) => {
   const rawWPM = totalWords / durationMinutes;
   return { drived, rawWPM };
 };
+
+export const countWrongWords = (userInputs, paragraph) => {
+  userInputs = userInputs.join("");
+  let noOfWrongWords = 0;
+  for (let i = 0; i < userInputs.length; i++) {
+    if (userInputs[i] !== paragraph[i]) noOfWrongWords++;
+  }
+  return noOfWrongWords;
+};
+
 export const buildTypedWordObject = (expected, typed) => {
   const len = Math.max(expected.length, typed.length);
   const charResults = [];
