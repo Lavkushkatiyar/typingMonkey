@@ -8,6 +8,7 @@ const calculateWPM = (start, paragraph, noOfWrongWords) => {
   const accuracy = correctWords / totalWords * 100;
   return { grossWPM, rawWPM, accuracy };
 };
+
 export const displayWPM = (start, paragraph, noOfWrongWords) => {
   const { grossWPM, rawWPM, accuracy } = calculateWPM(
     start,

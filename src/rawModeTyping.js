@@ -1,5 +1,11 @@
 import * as cl from "./colors.js";
 
+const renderUI = (paragraph, userOutput) => {
+  console.clear();
+  console.log(cl.bold(paragraph.join("")));
+  console.log(cl.bold(userOutput.join("")));
+};
+
 const performBackSpaceActions = (userOutput, inputArr) => {
   userOutput.pop();
   inputArr.pop();
@@ -9,7 +15,7 @@ const compareChar = (userChar, ogChar) =>
   userChar !== ogChar ? cl.bold(cl.red(userChar)) : cl.yellow(userChar);
 
 const getUserChar = async () => {
-  if (Deno.stdin.setRaw) Deno.stdin.setRaw(true, { cbreak: true });
+  Deno.stdin.setRaw(true, { cbreak: true });
 
   const decoder = new TextDecoder();
   const buf = new Uint8Array(1);
@@ -18,12 +24,6 @@ const getUserChar = async () => {
   if (n === null) return;
 
   return decoder.decode(buf);
-};
-
-const renderUI = (paragraph, userOutput) => {
-  console.clear();
-  console.log(cl.bold(paragraph.join("")));
-  console.log(cl.bold(userOutput.join("")));
 };
 
 export const startTypingSession = async (paragraph) => {
