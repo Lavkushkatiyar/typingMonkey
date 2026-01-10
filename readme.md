@@ -1,3 +1,8 @@
-Simple Typing master, here you can get your typing speed . IN Order to run the
-program run -- main.js defualt lenght is 10 . you can modify sentence length by
-giving the args while running the program. eg - deno main.js 40
+# Typing Master
+
+A small typing practice app (inspired by Monkeytype) to improve typing speed and
+accuracy.
+
+In order to Run the program YOu have to run main.js pragraph lenght (optional)
+
+Enjoy...

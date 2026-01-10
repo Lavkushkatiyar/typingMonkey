@@ -1,4 +1,4 @@
-import * as cl from "./src/colors.js";
+import * as cl from "./colors.js";
 
 const performBackSpaceActions = (userOutput, inputArr) => {
   userOutput.pop();
@@ -22,8 +22,8 @@ const getUserChar = async () => {
 
 const renderUI = (paragraph, userOutput) => {
   console.clear();
-  console.log(paragraph.join(""));
-  console.log(userOutput.join(""));
+  console.log(cl.bold(paragraph.join("")));
+  console.log(cl.bold(userOutput.join("")));
 };
 
 export const startTypingSession = async (paragraph) => {

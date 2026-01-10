@@ -1,16 +1,12 @@
 import { getParagraph } from "./src/paragraph .js";
-import { calculateWPM, countWrongWords } from "./src/functions.js";
-import { startTypingSession } from "./rawTyping.js";
+import { countWrongWords, displayWPM } from "./src/functions.js";
+import { startTypingSession } from "./src/rawModeTyping.js";
 
 const main = async (length) => {
   const paragraph = await getParagraph(length);
-  console.log(paragraph.split(""));
   const start = Date.now();
   const outputArr = await startTypingSession(paragraph.split(""));
   const noOfWrongWords = countWrongWords(outputArr, paragraph);
-  console.log(
-    "wpm",
-    calculateWPM(start, paragraph.split(" "), noOfWrongWords),
-  );
+  displayWPM(start, paragraph, noOfWrongWords);
 };
-main(10);
+main(Number(Deno.args) || 10);
