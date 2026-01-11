@@ -4,9 +4,9 @@ import { startTypingSession } from "./src/rawModeTyping.js";
 
 const main = async (length) => {
   const paragraph = await getParagraph(length);
-  const start = Date.now();
-  const outputArr = await startTypingSession(paragraph.split(""));
-  const noOfWrongWords = countWrongWords(outputArr, paragraph);
-  displayWPM(start, paragraph, noOfWrongWords);
+  const startTime = Date.now();
+  const userTypedWords = await startTypingSession(paragraph.split(""));
+  const noOfWrongWords = countWrongWords(userTypedWords, paragraph);
+  displayWPM(startTime, paragraph, noOfWrongWords);
 };
-main(Number(Deno.args) || 10);
+main(Number(Deno.args) || 20);

@@ -1,9 +1,11 @@
-import * as cl from "./colors.js";
+import { brightRed, brightYellow, gray } from "jsr:@std/fmt/colors";
 
-const renderUI = (paragraph, userOutput) => {
+const renderUI = (paragraph, userOutput, index) => {
   console.clear();
-  console.log(cl.bold(paragraph.join("")));
-  console.log(cl.bold(userOutput.join("")));
+  console.log(
+    userOutput.join("") +
+      gray(paragraph.slice(index + 1).join("")),
+  );
 };
 
 const performBackSpaceActions = (userOutput, inputArr) => {
@@ -12,7 +14,7 @@ const performBackSpaceActions = (userOutput, inputArr) => {
 };
 
 const compareChar = (userChar, ogChar) =>
-  userChar !== ogChar ? cl.bold(cl.red(userChar)) : cl.yellow(userChar);
+  userChar !== ogChar ? brightRed(userChar) : brightYellow(userChar);
 
 const getUserChar = async () => {
   Deno.stdin.setRaw(true, { cbreak: true });
@@ -43,7 +45,7 @@ export const startTypingSession = async (paragraph) => {
       userOutput.push(compareChar(inputArr[i], paragraph[i]));
     }
 
-    renderUI(paragraph, userOutput);
+    renderUI(paragraph, userOutput, i);
   }
 
   return inputArr;

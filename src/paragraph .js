@@ -29,7 +29,6 @@ export const getParagraph = async (length = 40) => {
       .replace(/[‘’]/g, "'")
       .trim()
       .split(" ");
-
     return words.slice(0, length).join(" ");
   } catch {
     return getLocalParagraph(length);

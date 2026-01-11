@@ -9,16 +9,17 @@ const calculateWPM = (start, paragraph, noOfWrongWords) => {
   return { grossWPM, rawWPM, accuracy };
 };
 
-export const displayWPM = (start, paragraph, noOfWrongWords) => {
+export const displayWPM = (startTime, paragraph, noOfWrongWords) => {
   const { grossWPM, rawWPM, accuracy } = calculateWPM(
-    start,
+    startTime,
     paragraph.split(" "),
     noOfWrongWords,
   );
   console.log(
-    `Gross WPM  ${grossWPM.toFixed(2)} WPM \n 
-Raw WPM ${rawWPM.toFixed(2)} WPM
-\n Accuracy ${accuracy} %`,
+    `Typing Results:\n` +
+      `Gross WPM : ${grossWPM.toFixed(2)} WPM\n` +
+      `Raw WPM   : ${rawWPM.toFixed(2)} WPM\n` +
+      `Accuracy  : ${accuracy} %`,
   );
 };
 
