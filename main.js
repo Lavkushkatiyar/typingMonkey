@@ -1,13 +1,20 @@
 import { getParagraph } from "./src/paragraph .js";
-import { calculateWPM, countWrongWords, displayWPM } from "./src/functions.js";
-import { startTypingSession } from "./src/rawModeTyping.js";
+import { startTypingSession } from "./src/typingSimulator.js";
+import { calculateWPM, countIncorrectWords, displayWPM } from "./src/utils.js";
 
 const main = async (length) => {
   const paragraph = await getParagraph(length);
   const startTime = Date.now();
   const userTypedWords = await startTypingSession(paragraph.split(""));
-  const noOfWrongWords = countWrongWords(userTypedWords, paragraph);
-  const typingResult = calculateWPM(startTime, paragraph, noOfWrongWords);
+  const endTime = Date.now();
+  const incorrectWords = countIncorrectWords(userTypedWords, paragraph);
+  // statistics, analytics..etc
+  const typingResult = calculateWPM(
+    startTime,
+    endTime,
+    paragraph,
+    incorrectWords,
+  );
   displayWPM(typingResult);
 };
-main(Number(Deno.args) || 20);
+main(Number(Deno.args[0]));

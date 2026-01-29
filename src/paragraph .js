@@ -10,7 +10,8 @@ const para3 =
 export const paragraphs = [para1, para2, para3];
 
 const getLocalParagraph = (length = 40) => {
-  const text = paragraphs[Math.floor(Math.random() * paragraphs.length)];
+  const randomIndex = Math.floor(Math.random() * paragraphs.length);
+  const text = paragraphs[randomIndex];
   console.log(text);
   return text.slice(0, length);
 };
