@@ -8,13 +8,17 @@ const renderUI = (paragraph, userOutput, index) => {
   );
 };
 
+const isNegative = (number) => number < 0;
+
 const performBackSpaceActions = (userOutput, inputArr) => {
   userOutput.pop();
   inputArr.pop();
 };
 
-const compareChar = (userChar, ogChar) =>
-  userChar !== ogChar ? brightRed(userChar) : brightYellow(userChar);
+const compareChar = (userChar, paragraphsCharacter) =>
+  userChar !== paragraphsCharacter
+    ? brightRed(userChar)
+    : brightYellow(userChar);
 
 const getUserChar = async () => {
   Deno.stdin.setRaw(true, { cbreak: true });
@@ -22,31 +26,38 @@ const getUserChar = async () => {
   const decoder = new TextDecoder();
   const buf = new Uint8Array(1);
 
-  const n = await Deno.stdin.read(buf);
-  if (n === null) return;
+  const numberOfBytes = await Deno.stdin.read(buf);
+  if (numberOfBytes === null) return;
 
   return decoder.decode(buf);
 };
 
 export const startTypingSession = async (paragraph) => {
   const userOutput = [];
-  const inputArr = [];
+  const characterInputArray = [];
 
   renderUI(paragraph, userOutput);
 
-  for (let i = 0; i < paragraph.length; i++) {
+  for (let index = 0; index < paragraph.length; index++) {
     const inputChar = await getUserChar();
 
     if (inputChar === "\x7f") {
-      performBackSpaceActions(userOutput, inputArr);
-      i -= 2;
+      performBackSpaceActions(userOutput, characterInputArray);
+      index -= 2;
     } else {
-      inputArr.push(inputChar);
-      userOutput.push(compareChar(inputArr[i], paragraph[i]));
+      characterInputArray.push(inputChar);
+
+      userOutput.push(
+        compareChar(characterInputArray[index], paragraph[index]),
+      );
     }
 
-    renderUI(paragraph, userOutput, i);
+    if (isNegative(index)) {
+      index = -1;
+    }
+
+    renderUI(paragraph, userOutput, index);
   }
 
-  return inputArr;
+  return characterInputArray;
 };

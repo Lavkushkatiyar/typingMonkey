@@ -1,5 +1,5 @@
 import { getParagraph } from "./src/paragraph .js";
-import { countWrongWords, displayWPM } from "./src/functions.js";
+import { calculateWPM, countWrongWords, displayWPM } from "./src/functions.js";
 import { startTypingSession } from "./src/rawModeTyping.js";
 
 const main = async (length) => {
@@ -7,6 +7,7 @@ const main = async (length) => {
   const startTime = Date.now();
   const userTypedWords = await startTypingSession(paragraph.split(""));
   const noOfWrongWords = countWrongWords(userTypedWords, paragraph);
-  displayWPM(startTime, paragraph, noOfWrongWords);
+  const typingResult = calculateWPM(startTime, paragraph, noOfWrongWords);
+  displayWPM(typingResult);
 };
 main(Number(Deno.args) || 20);

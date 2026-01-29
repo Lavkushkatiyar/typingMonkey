@@ -11,25 +11,28 @@ export const paragraphs = [para1, para2, para3];
 
 const getLocalParagraph = (length = 40) => {
   const text = paragraphs[Math.floor(Math.random() * paragraphs.length)];
-
-  return text.slice(0, length).join(" ");
+  console.log(text);
+  return text.slice(0, length);
 };
+
+const parseResponse = async (response) => {
+  const data = await response.json();
+  return data[0].q.trim().split(" ");
+};
+
+const buildWords = (text, length) => text.slice(0, length).join(" ");
 
 export const getParagraph = async (length = 40) => {
   try {
-    const res = await fetch("https://zenquotes.io/api/random");
+    const url = "https://zenquotes.io/api/random";
+    const response = await fetch(url);
 
-    if (!res.ok) return getLocalParagraph(length);
+    if (!response.ok) {
+      return getLocalParagraph(length);
+    }
 
-    const data = await res.json();
-
-    const words = data[0].q
-      .replace(/\s+/g, " ")
-      .replace(/[“”]/g, '"')
-      .replace(/[‘’]/g, "'")
-      .trim()
-      .split(" ");
-    return words.slice(0, length).join(" ");
+    const text = await parseResponse(response);
+    return buildWords(text, length);
   } catch {
     return getLocalParagraph(length);
   }
