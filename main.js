@@ -5,16 +5,21 @@ import { calculateWPM, countIncorrectWords, displayWPM } from "./src/utils.js";
 const main = async (length) => {
   const paragraph = await getParagraph(length);
   const startTime = Date.now();
+
   const userTypedWords = await startTypingSession(paragraph.split(""));
+
   const endTime = Date.now();
+
   const incorrectWords = countIncorrectWords(userTypedWords, paragraph);
-  // statistics, analytics..etc
-  const typingResult = calculateWPM(
+
+  const typingMetrics = calculateWPM(
     startTime,
     endTime,
     paragraph,
     incorrectWords,
   );
-  displayWPM(typingResult);
+
+  displayWPM(typingMetrics);
 };
+
 main(Number(Deno.args[0]));

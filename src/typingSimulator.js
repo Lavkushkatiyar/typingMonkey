@@ -56,6 +56,7 @@ export const startTypingSession = async (paragraph) => {
     const inputChar = await readUserChar();
     const cursorDelta = processInputChar(inputChar, paragraph, typingSession);
     typingSession.cursor += cursorDelta;
+
     renderTypingContent(paragraph, typingSession);
   }
 
